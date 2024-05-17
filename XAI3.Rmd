@@ -1,0 +1,77 @@
+---
+title: "XAI 2"
+author: "Sebastián Gómez, Martín Juanes, Jose Valero"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(randomForest)
+library(pdp)
+library(gridExtra)
+```
+
+# Exercice 1
+
+```{r}
+input_csv = 'day.csv'
+data = read.csv(input_csv)
+data$MISTY <- ifelse(data$weathersit == 2, 1, 0)
+data$RAIN  <- ifelse(data$weathersit %in% c(3, 4), 1, 0)
+data$days_since_2011 <- as.numeric(as.Date(data$dteday) - as.Date('2011-01-01'))
+data <- data %>%
+  mutate(season_spring = ifelse(season == 2, 1, 0),
+         season_summer = ifelse(season == 3, 1, 0),
+         season_fall   = ifelse(season == 4, 1, 0))
+data$temp <- data$temp * (39 - (-8)) + (-8)
+data$hum  <- data$hum * 100
+data$windspeed <- data$windspeed * 67
+```
+
+```{r}
+features <- c("workingday", "holiday", "season_spring",
+              "season_summer", "season_fall", "MISTY", "RAIN", "temp",
+              "hum", "windspeed", "days_since_2011", "cnt")
+
+set.seed(42)
+rf_model <- randomForest(cnt ~ ., data = data[, features], ntree = 500)
+```
+
+```{r}
+pdp_temp <- partial(rf_model, pred.var = "temp", plot = TRUE, rug = TRUE)
+pdp_hum <- partial(rf_model, pred.var = "hum", plot = TRUE, rug = TRUE)
+pdp_windspeed <- partial(rf_model, pred.var = "windspeed", plot = TRUE, rug = TRUE)
+pdp_days_since_2011 <- partial(rf_model, pred.var = "days_since_2011", plot = TRUE, rug = TRUE)
+```
+
+```{r}
+grid.arrange(pdp_temp, pdp_hum, pdp_windspeed, pdp_days_since_2011, nrow = 2)
+```
+
+# Exercice 2
+
+```{r}
+set.seed(123) # Esto asegura reproducibilidad
+sample_data <- data[sample(nrow(data), 500), ]
+
+rf_model <- randomForest(cnt ~ ., data = sample_data[, features], ntree = 500)
+pdp_hum_temp <- partial(rf_model, pred.var = c("hum", "temp"))
+```
+
+```{r}
+blue_palette <- colorRampPalette(c("lightblue", "darkblue"))(100)
+pdp1 <- plotPartial(pdp_hum_temp, col.region = blue_palette)
+pdp1
+```
+
+
+```{r}
+plot.pdp_hum_temp <- autoplot(pdp_hum_temp, contour = TRUE, 
+                              legend.title = "Partial\ndependence") +
+                     scale_fill_gradient(low = "lightblue", high = "darkblue")
+
+plot.pdp_hum_temp
+```
+
+
+# Exercice 3
