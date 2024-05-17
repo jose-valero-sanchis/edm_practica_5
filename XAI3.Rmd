@@ -51,7 +51,7 @@ grid.arrange(pdp_temp, pdp_hum, pdp_windspeed, pdp_days_since_2011, nrow = 2)
 # Exercice 2
 
 ```{r}
-set.seed(123) # Esto asegura reproducibilidad
+set.seed(123)
 sample_data <- data[sample(nrow(data), 500), ]
 
 rf_model <- randomForest(cnt ~ ., data = sample_data[, features], ntree = 500)
@@ -65,13 +65,38 @@ pdp1
 ```
 
 
-```{r}
-plot.pdp_hum_temp <- autoplot(pdp_hum_temp, contour = TRUE, 
-                              legend.title = "Partial\ndependence") +
-                     scale_fill_gradient(low = "lightblue", high = "darkblue")
+# Exercice 3
 
-plot.pdp_hum_temp
+```{r}
+input_csv = 'kc_house_data.csv'
+data_2 = read.csv(input_csv)
+```
+
+```{r}
+features_2 <- c("bedrooms", "bathrooms", "sqft_living", "sqft_lot", "floors", "yr_built", "price")
+
+set.seed(42)
+rf_model_2 <- randomForest(price ~ ., data = data_2[, features_2], ntree = 500)
+```
+
+```{r}
+pdp_bed <- partial(rf_model_2, pred.var = "bedrooms", plot = TRUE, rug = TRUE)
+pdp_bath <- partial(rf_model_2, pred.var = "bathrooms", plot = TRUE, rug = TRUE)
+pdp_living <- partial(rf_model_2, pred.var = "sqft_living", plot = TRUE, rug = TRUE)
+pdp_lot <- partial(rf_model_2, pred.var = "sqft_lot", plot = TRUE, rug = TRUE)
+pdp_floors <- partial(rf_model_2, pred.var = "floors", plot = TRUE, rug = TRUE)
+pdp_yr_built <- partial(rf_model_2, pred.var = "yr_built", plot = TRUE, rug = TRUE)
+```
+
+```{r}
+pdp_bed
+pdp_bath
+pdp_living
+pdp_lot
+pdp_floors
+pdp_yr_built
 ```
 
 
-# Exercice 3
+
+
