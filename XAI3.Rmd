@@ -45,7 +45,10 @@ pdp_days_since_2011 <- partial(rf_model, pred.var = "days_since_2011", plot = TR
 ```
 
 ```{r}
-grid.arrange(pdp_temp, pdp_hum, pdp_windspeed, pdp_days_since_2011, nrow = 2)
+pdp_temp
+pdp_hum
+pdp_windspeed
+pdp_days_since_2011
 ```
 
 # Exercice 2
@@ -54,7 +57,7 @@ grid.arrange(pdp_temp, pdp_hum, pdp_windspeed, pdp_days_since_2011, nrow = 2)
 set.seed(123)
 sample_data <- data[sample(nrow(data), 500), ]
 
-rf_model <- randomForest(cnt ~ ., data = sample_data[, features], ntree = 500)
+rf_model <- randomForest(cnt ~ ., data = data[, features], ntree = 500)
 pdp_hum_temp <- partial(rf_model, pred.var = c("hum", "temp"))
 ```
 
@@ -83,18 +86,14 @@ rf_model_2 <- randomForest(price ~ ., data = data_2[, features_2], ntree = 500)
 pdp_bed <- partial(rf_model_2, pred.var = "bedrooms", plot = TRUE, rug = TRUE)
 pdp_bath <- partial(rf_model_2, pred.var = "bathrooms", plot = TRUE, rug = TRUE)
 pdp_living <- partial(rf_model_2, pred.var = "sqft_living", plot = TRUE, rug = TRUE)
-pdp_lot <- partial(rf_model_2, pred.var = "sqft_lot", plot = TRUE, rug = TRUE)
 pdp_floors <- partial(rf_model_2, pred.var = "floors", plot = TRUE, rug = TRUE)
-pdp_yr_built <- partial(rf_model_2, pred.var = "yr_built", plot = TRUE, rug = TRUE)
 ```
 
 ```{r}
 pdp_bed
 pdp_bath
 pdp_living
-pdp_lot
 pdp_floors
-pdp_yr_built
 ```
 
 
