@@ -41,6 +41,6 @@ To use the code in this repository, follow these steps:
    
 ## Contributors
 
-- Sebastián Gómez
-- Martín Juanes
-- Jose Valero
+- [Sebastián Gómez](https://github.com/...)
+- [Martín Juanes](https://github.com/...)
+- [Jose Valero](https://github.com/jose-valero-sanchis) 
