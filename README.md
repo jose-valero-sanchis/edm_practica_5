@@ -14,30 +14,6 @@ The first scenario involves predicting the number of bicycles rented based on me
 ### Housing Price Forecasting
 
 The second scenario predicts house prices based on several variables as number of bedrooms, number of bathrooms...
-
-## Usage
-
-To use the code in this repository, follow these steps:
-
-1. **Clone the repository**:
-
-    ```bash
-    git clone https://github.com/jose-valero-sanchis/edm_practica_5.git
-    ```
-
-2. **Navigate to the project directory**:
-
-    ```bash
-    cd edm_practica_5
-    ```
-
-3. **Install necessary packages**: Ensure you have the required R packages installed to run the RMarkdown file. You can use the `renv` package to restore the environment.
-
-    ```R
-    renv::restore()
-    ```
-
-4. **Run the RMarkdown file**: Open `XAI3.Rmd` in RStudio or your preferred R environment and knit the document to generate the analysis.
    
 ## Contributors
 
